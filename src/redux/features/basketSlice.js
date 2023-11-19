@@ -3,7 +3,8 @@ const initialState = {
     products: [],
     amount: 4,
     user: null,
-    mode: 'light'
+    mode: 'light',
+    userData: localStorage.getItem("userData"),
 }
 
 document.documentElement.setAttribute("data-theme", initialState.mode);
@@ -20,11 +21,14 @@ const basketSlice = createSlice({
             localStorage.setItem("mode", state.mode);
             document.documentElement.setAttribute("data-theme", state.mode);
         },
+        setUserData: (state, { payload }) => {
+            state.userData = payload;
+        },
     },
 });
 
 
 
-export const { userSetting, toggleMode } = basketSlice.actions
+export const { userSetting, toggleMode, setUserData } = basketSlice.actions
 
 export default basketSlice.reducer

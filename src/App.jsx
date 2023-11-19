@@ -13,6 +13,8 @@ import Orders from "./pages/Orders"
 import Materials from "./components/Materials"
 import Material from "./pages/Material"
 import Error from "./pages/Error"
+import Register from "./pages/Register"
+import Login from "./pages/Login"
 
 function App() {
   const routes = createBrowserRouter([
@@ -54,6 +56,14 @@ function App() {
           element: <Material />
         }
       ]
+    },
+    {
+      path: "/register",
+      element: <Register />
+    },
+    {
+      path: "/login",
+      element: <Login />
     }
   ])
 

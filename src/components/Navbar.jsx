@@ -2,18 +2,53 @@ import { BsCart3, BsMoonFill, BsSunFill } from "react-icons/bs";
 import { Link, NavLink, } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMode } from "../redux/features/basketSlice";
+import { setUserData } from "../redux/features/basketSlice";
+import { useNavigate } from "react-router-dom";
+
 
 function Navbar() {
   const dispatch = useDispatch()
+  const navigate = useNavigate();
   const mode = useSelector((state) => state.basket.mode);
-
+  const userData = useSelector((state) => state.basket.userData);
 
   const handleMode = () => {
     dispatch(toggleMode())
   }
 
+  const handleLogOut = () => {
+    dispatch(setUserData(null));
+    localStorage.removeItem("userData");
+    navigate("/");
+  };
+
   return (
     <nav className="bg-base-200 dark:bg-[#F0F6FF]">
+      <div className="bg-neutral text-neutral-content">
+        {!userData && (
+          <div className="max-w-6xl px-5 py-2 mx-auto flex gap-5 justify-end top">
+            <Link to={"/login"} className="link link-hover text-xc sm:text-sm">
+              Login / Guest
+            </Link>
+            <Link
+              to={"/register"}
+              className="link link-hover text-xc sm:text-sm"
+            >
+              Create Account
+            </Link>
+          </div>
+        )}
+        {userData && (
+          <div className="max-w-6xl px-5 py-2 mx-auto flex gap-5 justify-end top">
+            <button
+              onClick={handleLogOut}
+              className="btn btn-sm btn-error"
+            >
+              Log Out
+            </button>
+          </div>
+        )}
+      </div>
       <div className="align-element pt-2 pb-2 flex items-center justify-between">
         <Link
           aria-current="page"
@@ -30,6 +65,7 @@ function Navbar() {
           <NavLink to="/chekout">Chekout</NavLink>
           <NavLink to="/orders">Orders</NavLink>
         </div>
+
         <div className="flex items-center">
           <button onClick={handleMode} className="dark:text-white">
             {mode == 'dark' ? <BsSunFill /> : <BsMoonFill />}
