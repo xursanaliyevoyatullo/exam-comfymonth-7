@@ -1,10 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 const initialState = {
     products: [],
     amount: 4,
     user: null,
     mode: 'light',
     userData: localStorage.getItem("userData"),
+    cartItems: [],
+    numItemsInCart: 0,
+    cartTotal: 0,
+    shipping: 500,
+    tax: 0,
+    orderTotal: 0,
 }
 
 document.documentElement.setAttribute("data-theme", initialState.mode);
@@ -24,11 +31,25 @@ const basketSlice = createSlice({
         setUserData: (state, { payload }) => {
             state.userData = payload;
         },
+        addItem: (state, action) => {
+            const { product } = action.payload;
+            const existingItem = state.cartItems.find(
+                (item) => item.productID === product.productID
+            );
+            if (existingItem) {
+                existingItem.amount += product.amount;
+            } else {
+                state.cartItems.push(product);
+            }
+            state.numItemsInCart += product.amount;
+            state.cartTotal += product.price * product.amount;
+            toast.success("Item added to cart");
+        },
     },
 });
 
 
 
-export const { userSetting, toggleMode, setUserData } = basketSlice.actions
+export const { userSetting, toggleMode, setUserData, addItem } = basketSlice.actions
 
 export default basketSlice.reducer
