@@ -2,8 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Loading from "../components/Loading"
+import { useDispatch } from "react-redux";
+import { addItem } from "../redux/features/basketSlice";
 
 function Material() {
+    const dispatch = useDispatch()
     const { id } = useParams();
     const api = `https://strapi-store-server.onrender.com/api/products/${id}`;
     const [data, setData] = useState();
@@ -17,8 +20,33 @@ function Material() {
             })
     }, [api]);
 
+    const [selectedColor, setSelectedColor] = useState(null);
+    const [productColor, setProductColor] = useState("");
+    const [amount, setAmount] = useState(1);
+    const handleColorClick = (color) => {
+        setSelectedColor(color === selectedColor ? null : color);
+        setProductColor(color);
+    };
+
+    const CartProduct = {
+        // cartID: product.id + productColor,
+        productID: Number(id),
+        image: data && data.attributes.image,
+        title: data && data.attributes.title,
+        price: data && data.attributes.price,
+        amount: Number(amount),
+        productColor,
+        company: data && data.attributes.company,
+    };
+    console.log(CartProduct);
+
+    const addToCart = () => {
+        dispatch(addItem({ product: CartProduct }));
+    };
+
+
     if (data == null) {
-        return <Loading/>;
+        return <Loading />;
     }
 
     return (
@@ -46,15 +74,19 @@ function Material() {
                         </h2>
                         <div>
                             <h4>Colors:</h4>
-                            <div className="mt-2">
-                                <button
-                                    type="button"
-                                    className="badge badge-success w-6 h-6 mr-2 border-2"
-                                ></button>
-                                <button
-                                    type="button"
-                                    className="badge badge-primary w-6 h-6 mr-2 false"
-                                ></button>
+                            <div className="mt-2 flex gap-2">
+                                {data.attributes.colors.map((color, index) => (
+                                    <span
+                                        key={index}
+                                        onClick={() => handleColorClick(color)}
+                                        style={{
+                                            backgroundColor: color,
+                                            border:
+                                                selectedColor === color ? "2px solid #463AA1" : "none",
+                                        }}
+                                        className="span w-6 h-6 rounded-[50%] cursor-pointer"
+                                    ></span>
+                                ))}
                             </div>
                         </div>
                         <div className="form-control w-full max-w-xs">
@@ -63,7 +95,7 @@ function Material() {
                                     amount
                                 </h4>
                             </label>
-                            <select className="select select-primary border-indigo-600 mb-7 select-md" id="amount">
+                            <select onChange={(e) => setAmount(e.target.value)} className="select select-primary border-indigo-600 mb-7 select-md" id="amount">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -87,7 +119,7 @@ function Material() {
                             </select>
                         </div>
                         <div className="mb-10">
-                            <Link to="/cart" className="btn btn-primary">ADD TO BAG</Link>
+                            <button onClick={addToCart} className="btn btn-primary">ADD TO BAG</button>
                         </div>
                     </div>
                 </div>

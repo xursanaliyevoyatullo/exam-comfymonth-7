@@ -11,6 +11,8 @@ function Navbar() {
   const navigate = useNavigate();
   const mode = useSelector((state) => state.basket.mode);
   const userData = useSelector((state) => state.basket.userData);
+  const numItemsInCart = useSelector((state) => state.basket.numItemsInCart)
+  // console.log(numItemsInCart)
 
   const handleMode = () => {
     dispatch(toggleMode())
@@ -73,6 +75,9 @@ function Navbar() {
           <NavLink to="cart" className="btn btn-ghost btn-circle btn-md ml-4">
             <div className="indicator w-[20px]">
               <BsCart3 className="h-6 w-6" />
+              <span className="badge badge-sm badge-primary indicator-item">
+                {numItemsInCart}
+              </span>
             </div>
           </NavLink>
         </div>
