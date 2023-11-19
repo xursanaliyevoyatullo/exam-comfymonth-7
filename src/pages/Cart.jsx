@@ -15,9 +15,11 @@ function Cart() {
 
   if (cartItems.length == 0) {
     return (
-      <h2 className="align-element border-b border-base-300 pb-5 text-3xl font-medium tracking-wider capitalize">
-        Your Cart Is Empty
-      </h2>
+      <div className='align-element mt-20'>
+        <h2 className="border-b border-base-300 pb-5 text-3xl font-medium tracking-wider ">
+          Your Cart Is Empty
+        </h2>
+      </div>
     );
   }
   return (
