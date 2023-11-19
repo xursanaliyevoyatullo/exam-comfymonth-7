@@ -45,11 +45,25 @@ const basketSlice = createSlice({
             state.cartTotal += product.price * product.amount;
             toast.success("Item added to cart");
         },
+        removeItem: (state, action) => {
+            const cartID = action.payload;
+            const product = state.cartItems.find((item) => item.productID === cartID);
+            if (product) {
+                state.cartItems = state.cartItems.filter(
+                    (item) => item.productID !== cartID
+                );
+                state.numItemsInCart -= product.amount;
+                state.cartTotal -= product.price * product.amount;
+                toast.error("Item removed from cart");
+            } else {
+                console.warn("Item not found in the cart");
+            }
+        },
     },
 });
 
 
 
-export const { userSetting, toggleMode, setUserData, addItem } = basketSlice.actions
+export const { userSetting, toggleMode, setUserData, addItem, removeItem } = basketSlice.actions
 
 export default basketSlice.reducer

@@ -1,12 +1,21 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
+import { removeItem } from '../redux/features/basketSlice';
+
 
 function Cart() {
   const cartItems = useSelector((state) => state.basket.cartItems)
+  const dispatch = useDispatch()
+
+  const removeItemFromTheCart = (productID) => {
+    console.log(productID);
+    dispatch(removeItem(productID));
+  };
+
   if (cartItems.length == 0) {
     return (
-      <h2 className="border-b border-base-300 pb-5 text-3xl font-medium tracking-wider capitalize">
+      <h2 className="align-element border-b border-base-300 pb-5 text-3xl font-medium tracking-wider capitalize">
         Your Cart Is Empty
       </h2>
     );
